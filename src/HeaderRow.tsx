@@ -17,7 +17,11 @@ type SharedDataGridProps<R, SR, K extends React.Key> = Pick<
 export interface HeaderRowProps<R, SR, K extends React.Key> extends SharedDataGridProps<R, SR, K> {
   rowIdx: number;
   columns: readonly CalculatedColumn<R, SR>[];
-  onColumnResize: (column: CalculatedColumn<R, SR>, width: number | 'max-content') => void;
+  onColumnResize: (
+    column: CalculatedColumn<R, SR>,
+    width: number | 'max-content',
+    isComplete?: boolean
+  ) => void;
   selectCell: (position: Position) => void;
   lastFrozenColumnIndex: number;
   selectedCellIdx: number | undefined;

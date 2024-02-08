@@ -65,7 +65,11 @@ export function useColumnWidths<R, SR>(
     });
   }
 
-  function handleColumnResize(column: CalculatedColumn<R, SR>, nextWidth: number | 'max-content') {
+  function handleColumnResize(
+    column: CalculatedColumn<R, SR>,
+    nextWidth: number | 'max-content',
+    isComplete = false
+  ) {
     const { key: resizingKey } = column;
     const newTemplateColumns = [...templateColumns];
     const columnsToMeasure: string[] = [];
@@ -96,7 +100,7 @@ export function useColumnWidths<R, SR>(
       updateMeasuredWidths(columnsToMeasure);
     });
 
-    onColumnResize?.(column.idx, measuredWidth);
+    onColumnResize?.(column.idx, measuredWidth, isComplete);
   }
 
   return {
