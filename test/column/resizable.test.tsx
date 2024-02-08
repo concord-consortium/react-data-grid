@@ -1,6 +1,7 @@
 import { fireEvent } from '@testing-library/react';
 
 import type { Column } from '../../src';
+import DataGrid from '../../src';
 import { resizeHandleClassname } from '../../src/HeaderCell';
 import { getGrid, getHeaderCells, setup } from '../utils';
 
@@ -97,5 +98,15 @@ test('should use the minWidth if specified', () => {
   const [, col2] = getHeaderCells();
   expect(getGrid()).toHaveStyle({ gridTemplateColumns: '100px 200px' });
   resize({ column: col2, clientXStart: 295, clientXEnd: 100, rect: { right: 300, left: 100 } });
+  expect(getGrid()).toHaveStyle({ gridTemplateColumns: '100px 100px' });
+});
+
+test('client can update columns widths', () => {
+  const props = { columns, rows: [] };
+  const { rerender } = setup(props);
+  expect(getGrid()).toHaveStyle({ gridTemplateColumns: '100px 200px' });
+  const resizedColumnWidths = new Map<string, number>([['col2', 100]]);
+  const newProps = { ...props, resizedColumnWidths };
+  rerender(<DataGrid {...newProps} />);
   expect(getGrid()).toHaveStyle({ gridTemplateColumns: '100px 100px' });
 });

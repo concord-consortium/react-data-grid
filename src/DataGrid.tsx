@@ -141,6 +141,10 @@ export interface DataGridProps<R, SR = unknown, K extends Key = Key> extends Sha
    * @default 35
    */
   summaryRowHeight?: Maybe<number>;
+  /**
+   * The client-managed width of each resized column in pixels
+   */
+  resizedColumnWidths?: ReadonlyMap<string, number>;
 
   /**
    * Feature props
@@ -180,7 +184,7 @@ export interface DataGridProps<R, SR = unknown, K extends Key = Key> extends Sha
   /** Called when the grid is scrolled */
   onScroll?: Maybe<(event: React.UIEvent<HTMLDivElement>) => void>;
   /** Called when a column is resized */
-  onColumnResize?: Maybe<(idx: number, width: number) => void>;
+  onColumnResize?: Maybe<(idx: number, width: number, isComplete?: boolean) => void>;
   /** Called when a column is reordered */
   onColumnsReorder?: Maybe<(sourceColumnKey: string, targetColumnKey: string) => void>;
 
@@ -223,6 +227,7 @@ function DataGrid<R, SR, K extends Key>(
     rowHeight: rawRowHeight,
     headerRowHeight: rawHeaderRowHeight,
     summaryRowHeight: rawSummaryRowHeight,
+    resizedColumnWidths: rawResizedColumnWidths,
     // Feature props
     selectedRows,
     onSelectedRowsChange,
@@ -281,7 +286,7 @@ function DataGrid<R, SR, K extends Key>(
   const [scrollTop, setScrollTop] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
   const [resizedColumnWidths, setResizedColumnWidths] = useState(
-    (): ReadonlyMap<string, number> => new Map()
+    (): ReadonlyMap<string, number> => new Map(rawResizedColumnWidths)
   );
   const [measuredColumnWidths, setMeasuredColumnWidths] = useState(
     (): ReadonlyMap<string, number> => new Map()
@@ -294,10 +299,13 @@ function DataGrid<R, SR, K extends Key>(
   const getColumnWidth = useCallback(
     (column: CalculatedColumn<R, SR>) => {
       return (
-        resizedColumnWidths.get(column.key) ?? measuredColumnWidths.get(column.key) ?? column.width
+        rawResizedColumnWidths?.get(column.key) ??
+        resizedColumnWidths.get(column.key) ??
+        measuredColumnWidths.get(column.key) ??
+        column.width
       );
     },
-    [measuredColumnWidths, resizedColumnWidths]
+    [measuredColumnWidths, rawResizedColumnWidths, resizedColumnWidths]
   );
 
   const [gridRef, gridWidth, gridHeight, horizontalScrollbarHeight] = useGridDimensions();
