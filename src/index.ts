@@ -6,7 +6,7 @@ export { DataGridDefaultRenderersProvider } from './DataGridDefaultRenderersProv
 export { default as Row } from './Row';
 export * from './Columns';
 export * from './cellRenderers';
-export { default as textEditor } from './editors/textEditor';
+export { default as textEditor, textEditorClassname } from './editors/textEditor';
 export { default as renderHeaderCell } from './renderHeaderCell';
 export { renderSortIcon, renderSortPriority } from './sortStatus';
 export { useRowSelection } from './hooks';
