@@ -126,6 +126,9 @@ export default function Nav({ direction, onDirectionChange }: Props) {
       <NavLink to="/scroll-to-cell" end className={getActiveClassname}>
         Scroll To Cell
       </NavLink>
+      <NavLink to="/save-column-widths" end className={getActiveClassname}>
+        Save Column Widths
+      </NavLink>
       <NavLink to="/tree-view" end className={getActiveClassname}>
         Tree View
       </NavLink>

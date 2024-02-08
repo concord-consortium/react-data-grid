@@ -122,16 +122,20 @@ export default function HeaderCell<R, SR>({
     const headerCell = currentTarget.parentElement!;
     const { right, left } = headerCell.getBoundingClientRect();
     const offset = isRtl ? event.clientX - left : right - event.clientX;
+    let lastWidth = 0;
 
     function onPointerMove(event: PointerEvent) {
       const { right, left } = headerCell.getBoundingClientRect();
       const width = isRtl ? right + offset - event.clientX : event.clientX + offset - left;
       if (width > 0) {
-        onColumnResize(column, clampColumnWidth(width, column));
+        lastWidth = clampColumnWidth(width, column);
+        onColumnResize(column, lastWidth);
       }
     }
 
     function onLostPointerCapture() {
+      // let client know that resize is complete
+      onColumnResize(column, lastWidth, true);
       currentTarget.removeEventListener('pointermove', onPointerMove);
       currentTarget.removeEventListener('lostpointercapture', onLostPointerCapture);
     }
@@ -187,7 +191,7 @@ export default function HeaderCell<R, SR>({
   }
 
   function onDoubleClick() {
-    onColumnResize(column, 'max-content');
+    onColumnResize(column, 'max-content', true);
   }
 
   function handleFocus(event: React.FocusEvent<HTMLDivElement>) {

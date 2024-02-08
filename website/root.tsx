@@ -23,6 +23,7 @@ import NoRows from './demos/NoRows';
 import ResizableGrid from './demos/Resizable';
 import RowGrouping from './demos/RowGrouping';
 import RowsReordering from './demos/RowsReordering';
+import SaveColumnWidths from './demos/SaveColumnWidths';
 import ScrollToCell from './demos/ScrollToCell';
 import TreeView from './demos/TreeView';
 import VariableRowHeight from './demos/VariableRowHeight';
@@ -64,6 +65,7 @@ function Root() {
           <Route path="no-rows" element={<NoRows direction={direction} />} />
           <Route path="resizable-grid" element={<ResizableGrid direction={direction} />} />
           <Route path="rows-reordering" element={<RowsReordering direction={direction} />} />
+          <Route path="save-column-widths" element={<SaveColumnWidths direction={direction} />} />
           <Route path="scroll-to-cell" element={<ScrollToCell direction={direction} />} />
           <Route path="tree-view" element={<TreeView direction={direction} />} />
           <Route path="variable-row-height" element={<VariableRowHeight direction={direction} />} />
