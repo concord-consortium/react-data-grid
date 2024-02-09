@@ -142,9 +142,9 @@ export interface DataGridProps<R, SR = unknown, K extends Key = Key> extends Sha
    */
   summaryRowHeight?: Maybe<number>;
   /**
-   * The client-managed width of each resized column in pixels
+   * The client-managed width of each column in pixels
    */
-  resizedColumnWidths?: ReadonlyMap<string, number>;
+  columnWidths?: ReadonlyMap<string, number>;
 
   /**
    * Feature props
@@ -219,7 +219,7 @@ function DataGrid<R, SR, K extends Key>(
     rowHeight: rawRowHeight,
     headerRowHeight: rawHeaderRowHeight,
     summaryRowHeight: rawSummaryRowHeight,
-    resizedColumnWidths: rawResizedColumnWidths,
+    columnWidths: rawColumnWidths,
     // Feature props
     selectedRows,
     onSelectedRowsChange,
@@ -278,7 +278,7 @@ function DataGrid<R, SR, K extends Key>(
   const [scrollTop, setScrollTop] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
   const [resizedColumnWidths, setResizedColumnWidths] = useState(
-    (): ReadonlyMap<string, number> => new Map(rawResizedColumnWidths)
+    (): ReadonlyMap<string, number> => new Map(rawColumnWidths)
   );
   const [measuredColumnWidths, setMeasuredColumnWidths] = useState(
     (): ReadonlyMap<string, number> => new Map()
@@ -291,13 +291,13 @@ function DataGrid<R, SR, K extends Key>(
   const getColumnWidth = useCallback(
     (column: CalculatedColumn<R, SR>) => {
       return (
-        rawResizedColumnWidths?.get(column.key) ??
+        rawColumnWidths?.get(column.key) ??
         resizedColumnWidths.get(column.key) ??
         measuredColumnWidths.get(column.key) ??
         column.width
       );
     },
-    [measuredColumnWidths, rawResizedColumnWidths, resizedColumnWidths]
+    [measuredColumnWidths, rawColumnWidths, resizedColumnWidths]
   );
 
   const [gridRef, gridWidth, gridHeight] = useGridDimensions();
