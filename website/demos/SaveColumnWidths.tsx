@@ -144,7 +144,7 @@ export default function SaveColumnWidths({ direction }: Props) {
       <DataGrid
         columns={columns}
         rows={rows}
-        resizedColumnWidths={columnWidths}
+        columnWidths={columnWidths}
         onColumnResize={handleColumnResize}
         className="fill-grid"
         style={{ resize: 'both' }}

@@ -1,6 +1,6 @@
 import { fireEvent } from '@testing-library/react';
 
-import type { Column } from '../../src';
+import type { Column, DataGridProps } from '../../src';
 import DataGrid from '../../src';
 import { resizeHandleClassname } from '../../src/HeaderCell';
 import { getGrid, getHeaderCells, setup } from '../utils';
@@ -105,8 +105,8 @@ test('client can update columns widths', () => {
   const props = { columns, rows: [] };
   const { rerender } = setup(props);
   expect(getGrid()).toHaveStyle({ gridTemplateColumns: '100px 200px' });
-  const resizedColumnWidths = new Map<string, number>([['col2', 100]]);
-  const newProps = { ...props, resizedColumnWidths };
+  const columnWidths = new Map<string, number>([['col2', 100]]);
+  const newProps: DataGridProps<Row> = { ...props, columnWidths };
   rerender(<DataGrid {...newProps} />);
   expect(getGrid()).toHaveStyle({ gridTemplateColumns: '100px 100px' });
 });
