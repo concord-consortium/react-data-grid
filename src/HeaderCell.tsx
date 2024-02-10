@@ -135,7 +135,9 @@ export default function HeaderCell<R, SR>({
 
     function onLostPointerCapture() {
       // let client know that resize is complete
-      onColumnResize(column, lastWidth, true);
+      if (lastWidth > 0) {
+        onColumnResize(column, lastWidth, true);
+      }
       currentTarget.removeEventListener('pointermove', onPointerMove);
       currentTarget.removeEventListener('lostpointercapture', onLostPointerCapture);
     }
