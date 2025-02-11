@@ -733,9 +733,9 @@ function DataGrid<R, SR, K extends Key>(
 
     // Treat request to select empty selection sentinel as a request to clear the cell selection
     if (isClearCellSelectionPosition(position)) {
-      const initialPosition = { idx: -1, rowIdx: minRowIdx - 1, mode: 'SELECT' };
+      const initialPosition: SelectCellState = { idx: -1, rowIdx: minRowIdx - 1, mode: 'SELECT' };
       if (!isSamePosition(selectedPosition, initialPosition)) {
-        setSelectedPosition({ idx: -1, rowIdx: minRowIdx - 1, mode: 'SELECT' });
+        setSelectedPosition(initialPosition);
       }
       return;
     }
