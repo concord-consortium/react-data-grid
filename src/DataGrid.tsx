@@ -71,6 +71,8 @@ import {
 import { rowSelected, rowSelectedWithFrozenCell } from './style/row';
 import SummaryRow from './SummaryRow';
 
+export const CLEAR_CELL_SELECTION_POSITION: Position = { idx: -999, rowIdx: -999 };
+
 export interface SelectCellState extends Position {
   readonly mode: 'SELECT';
 }
@@ -700,6 +702,12 @@ function DataGrid<R, SR, K extends Key>(
     return rowIdx >= 0 && rowIdx < rows.length;
   }
 
+  function isClearCellSelectionPosition({ idx, rowIdx }: Position): boolean {
+    return (
+      idx === CLEAR_CELL_SELECTION_POSITION.idx && rowIdx === CLEAR_CELL_SELECTION_POSITION.rowIdx
+    );
+  }
+
   function isCellWithinSelectionBounds({ idx, rowIdx }: Position): boolean {
     return rowIdx >= minRowIdx && rowIdx <= maxRowIdx && isColIdxWithinSelectionBounds(idx);
   }
@@ -720,8 +728,17 @@ function DataGrid<R, SR, K extends Key>(
   }
 
   function selectCell(position: Position, enableEditor?: Maybe<boolean>): void {
-    if (!isCellWithinSelectionBounds(position)) return;
+    if (!isCellWithinSelectionBounds(position) && !isClearCellSelectionPosition(position)) return;
     commitEditorChanges();
+
+    // Treat request to select empty selection sentinel as a request to clear the cell selection
+    if (isClearCellSelectionPosition(position)) {
+      const initialPosition: SelectCellState = { idx: -1, rowIdx: minRowIdx - 1, mode: 'SELECT' };
+      if (!isSamePosition(selectedPosition, initialPosition)) {
+        setSelectedPosition(initialPosition);
+      }
+      return;
+    }
 
     const row = rows[position.rowIdx];
     const samePosition = isSamePosition(selectedPosition, position);
